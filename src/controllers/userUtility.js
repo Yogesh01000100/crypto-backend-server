@@ -18,15 +18,15 @@ export const getTransactions = async (req, res) => {
     user.transactions = transactions;
     await user.save();
     res.status(200).json({
-      status: 'success',
-      message: 'Transactions fetched successfully!',
-      data: transactions
-  });
-  } catch (error) {   
+      status: "success",
+      message: "Transactions fetched successfully!",
+      data: transactions,
+    });
+  } catch (error) {
     res.status(500).json({
-      status: 'error',
-      message: 'Error fetching transactions!',
-      data: []
-  });
+      status: "error",
+      message: "Error fetching transactions!",
+      data: [],
+    });
   }
 };
