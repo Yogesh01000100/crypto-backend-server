@@ -1,9 +1,14 @@
-# crypto BACKEND server
+# Crypto Backend Server
 
 ## Description
-- The crypto BACKEND server is built with Node.js and Express and is designed to interface with the Ethereum blockchain. 
-- It fetches transaction data for Ethereum addresses using third-party APIs.
-- This information is stored in MongoDB for quick retrieval and analysis.
+The Crypto Backend Server is a Node.js application using the Express framework, designed to interact with the Ethereum blockchain. It interfaces with third-party APIs like Etherscan to fetch transaction data, which is then stored in a MongoDB database. This allows for efficient retrieval and analysis of blockchain transactions.
 
 ## Features
-- **Transaction Retrieval**: Fetch and store Ethereum transactions for any given address.
+- **Transaction Retrieval**: Fetches and stores transaction details for Ethereum addresses.
+- **User Balance and Price Updates**: Regularly updates user balances and fetches the latest Ethereum price in INR, utilizing the CoinGecko API.
+- **Scheduled Price Updates**: Implements a cron job that updates the Ethereum price at regular intervals.
+- **REST API**: Provides endpoints for retrieving transaction data and balance information.
+
+## Deployment
+- **Server**: Deployed on AWS EC2 -> https://blockstrack.cloud/
+- **Database**: Hosted on MongoDB Cloud

@@ -1,22 +1,23 @@
 import axios from "axios";
 import "dotenv/config";
 import { User } from "../models/User.js";
+import { Transaction } from "../models/Transaction.js";
+import { fetchAllTransactions } from "../utils/fetch.js";
 
-const apikey = process.env.API_KEY;
+const BASE_URL_COINGECKO = process.env.COINGECKO_URL;
 
 export const getTransactions = async (req, res) => {
-  const address = req.params.address;
+  const address = req.params.address.toLowerCase();
   try {
-    const response = await axios.get(
-      `https://api.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10000&sort=asc&apikey=${apikey}`
-    );
-    const transactions = response.data.result;
-    let user = await User.findOne({ address: address });
+    let user = await User.findOne({ address });
+
     if (!user) {
-      user = new User({ address: address });
+      await fetchAllTransactions(address);
+      user = await User.findOne({ address });
     }
-    user.transactions = transactions;
-    await user.save();
+
+    const transactions = await Transaction.find({ user: user._id });
+
     res.status(200).json({
       status: "success",
       message: "Transactions fetched successfully!",
@@ -32,34 +33,49 @@ export const getTransactions = async (req, res) => {
 };
 
 export const fetchUserBalanceAndPrice = async (req, res) => {
-  const address = req.params.address;
+  const address = req.params.address.toLowerCase();
+
   try {
-    const priceResponse = await axios.get(
-      "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=inr"
-    );
+    const priceResponse = await axios.get(`${BASE_URL_COINGECKO}`);
     const ethPrice = priceResponse.data.ethereum.inr;
 
-    const user = await User.findOne({ address: address });
+    let user = await User.findOne({ address });
+
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      await fetchAllTransactions(address);
+      user = await User.findOne({ address });
     }
 
+    const transactions = await Transaction.find({
+      $or: [{ from: address }, { to: address }],
+    });
+
     let balance = 0;
-    user.transactions.forEach((tx) => {
-      if (tx.to === address) {
-        balance += parseFloat(tx.value);
-      }
-      if (tx.from === address) {
-        balance -= parseFloat(tx.value);
+    transactions.forEach((tx) => {
+      const toTransaction = tx.to.toLowerCase();
+      const fromTransaction = tx.from.toLowerCase();
+
+      const valueInEth = parseFloat(tx.value) / 1e18;
+      if (tx.isError === "0" && tx.txreceipt_status === "1") {
+        if (toTransaction == address) {
+          balance += valueInEth;
+        }
+        if (fromTransaction.toLowerCase() == address) {
+          balance -= valueInEth;
+        }
       }
     });
+    balance = parseFloat(balance.toFixed(6));
+    user.balance = balance;
+    await user.save();
+
     res.status(200).json({
       status: "success",
-      message: "Balance Updated successfully!",
-      data: [{ balance: balance, ethPrice: ethPrice }],
+      message: "Balance updated successfully!",
+      data: [{ balance: `${balance} ETH`, ethPrice: `₹ ${ethPrice}` }],
     });
   } catch (error) {
-    console.error("Error fetching user balance and Ethereum price:", error);
+    console.error("Error:", error);
     res.status(500).json({
       status: "error",
       message: "Failed to update the balance!",
