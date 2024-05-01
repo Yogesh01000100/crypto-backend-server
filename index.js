@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import userRoutes from "./src/routes/userRoutes.js";
-import { setupPriceScheduler } from "./src/controllers/PriceUtility.js";
+import { setupPriceScheduler } from "./src/tasks/PriceUtility.js";
 import "dotenv/config";
 
 const port = process.env.PORT || 3001;
