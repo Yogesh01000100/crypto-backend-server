@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "start": "pm2 start index.js --name 'koinx-backend'",
     "dev": "nodemon index.js"
   },
   "keywords": [],

@@ -1,10 +1,14 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import path from "path";
 import userRoutes from "./src/routes/userRoutes.js";
 import { setupPriceScheduler } from "./src/tasks/PriceUtility.js";
+import { fileURLToPath } from "url";
 import "dotenv/config";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const port = process.env.PORT || 3001;
 const mongoUri = process.env.MONGODB_URI;
 const app = express();
@@ -27,7 +31,7 @@ async function connectDatabase() {
 app.use("/user", userRoutes);
 
 app.get("/", (req, res) => {
-  res.status(200).send(" Welcome to KOINX BACKEND server !");
+  res.sendFile("index.html", { root: path.join(__dirname, ".") });
 });
 
 connectDatabase();

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Koinx Backend Service</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f4f4f9;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+      }
+      .container {
+        max-width: fit-content;
+        width: 100%;
+        padding: 22px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        background-color: #fff;
+      }
+      h1 {
+        color: #4a90e2;
+        font-size: 24px;
+      }
+      h2 {
+        color: #333;
+        font-size: 20px;
+      }
+      ul {
+        padding: 15px;
+        border-radius: 8px;
+        list-style-type: none;
+      }
+      li {
+        margin: 5px 0;
+        font-size: 16px;
+      }
+      p {
+        background: #fff;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        max-width: fit-content;
+        justify-content: space-between;
+        min-width: fit-content;
+      }
+      .clipboard-icon {
+        cursor: pointer;
+      }
+      @media (max-width: 768px) {
+        body {
+          margin: 10px;
+        }
+        h1,
+        h2 {
+          font-size: 18px;
+        }
+        ul {
+          padding: 10px;
+        }
+        li {
+          font-size: 13px;
+        }
+        p {
+          font-size: 12px;
+          padding: 10px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+        }
+        .text-p {
+          font-size: 12px;
+        }
+        .clipboard-icon {
+          margin-top: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Welcome to the Koinx Backend Server!</h1>
+      <h2>API Endpoints:</h2>
+      <ul>
+        <li>
+          <strong>Get Transactions:</strong> GET
+          <i>user/transactions/:address<br /></i>Fetches all transactions for a
+          specified blockchain address.
+        </li>
+        <li>
+          <strong>Get Balance and Price:</strong> GET
+          <i>user/balance/:address</i><br />Fetches the balance and current
+          Ethereum price in INR for a specified blockchain address.
+        </li>
+      </ul>
+
+      <div class="text-p">You can use this address for testing:-</div>
+
+      <p>
+        <span id="testAddress"
+          ><b>0xce94e5621a5f7068253c42558c147480f38b5e0d</b>
+          <i
+            class="far fa-clipboard clipboard-icon"
+            onclick="copyToClipboard()"
+            title="Copy to clipboard"
+          ></i
+        ></span>
+      </p>
+    </div>
+
+    <script>
+      function copyToClipboard() {
+        const address = document.getElementById("testAddress").innerText;
+        const el = document.createElement("textarea");
+        el.value = address;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand("copy");
+        document.body.removeChild(el);
+        alert("Address copied to clipboard!");
+      }
+    </script>
+  </body>
+</html>
