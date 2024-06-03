@@ -10,7 +10,7 @@ The Crypto Backend Server is a Node.js application using the Express framework, 
 - **REST API**: Provides endpoints for retrieving transaction data and balance information.
 
 ## Deployment
-- **Server**: Deployed on AWS EC2 -> [https://blockstrack.cloud/](https://blocktalks.site/)
+- **Server**: Deployed on AWS EC2 -> https://blocktalks.site/
 - **Database**: Hosted on MongoDB Cloud
 
 ## Architecture
